@@ -5,6 +5,7 @@ module.exports = function toReadable (number) {
     let integer = 0;
     let new_integer = 0;
     let digit_string = {
+        0: 'zero',
         1: 'one', 
         2: 'two',
         3: 'three',
@@ -35,19 +36,32 @@ module.exports = function toReadable (number) {
         8: 'eighty',
         9: 'ninety'
     }
-    if( number === 0){
-        return string_number = 'zero';
+    if( digit_string.hasOwnProperty(number)){
+        return string_number = digit_string[number];
     } else{
         remainder = number % 100;
         integer = Math.floor(number / 100);
-        if(digit_string.hasOwnProperty(remainder)){
-            string_number = `${digit_string[integer]} hundred ${digit_string[remainder]}`;
+        if( number < 100){
+            new_remainder = remainder % 10;
+            new_integer = Math.floor(remainder / 10);
+            if( new_remainder === 0){
+                return string_number = `${two_digit_string[new_integer]}`;
+            } else{
+                return string_number = `${two_digit_string[new_integer]} ${digit_string[new_remainder]}`;
+            }
+        }
+        if( remainder === 0){
+            return string_number = `${digit_string[integer]} hundred`;
+        } else if(digit_string.hasOwnProperty(remainder)){
+            return string_number = `${digit_string[integer]} hundred ${digit_string[remainder]}`;
         } else{
             new_remainder = remainder % 10;
             new_integer = Math.floor(remainder / 10);
-            console.log(new_integer);
-            string_number = `${digit_string[integer]} hundred ${two_digit_string[new_integer]} ${digit_string[new_remainder]}`;
+            if( new_remainder === 0){
+                return string_number = `${digit_string[integer]} hundred ${two_digit_string[new_integer]}`;
+            } else{
+                return string_number = `${digit_string[integer]} hundred ${two_digit_string[new_integer]} ${digit_string[new_remainder]}`;
+            }
         }
-        return string_number;
     }
 }
